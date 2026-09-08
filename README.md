@@ -92,6 +92,10 @@ attachments, linked issues) or takes your text as the spec, checks git
 history and any configured Sonar/CodeGraph/Hindsight context, and ends with a
 plan you have to approve before anything else happens.
 
+Before any of that, it runs [`/task-pilot`](#task-pilot)'s version check —
+silent if you're current, otherwise it asks before pulling in an update, then
+continues into the research above either way.
+
 ```
 /task-intake ABC-123
 /task-intake add session invalidation in updating user's profile API

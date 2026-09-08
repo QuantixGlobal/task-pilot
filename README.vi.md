@@ -91,6 +91,11 @@ văn bản của bạn làm spec, kiểm tra git history và các nguồn contex
 hình (Sonar/CodeGraph/Hindsight), rồi kết thúc bằng một bản kế hoạch mà bạn
 phải duyệt trước khi bất cứ thứ gì khác xảy ra.
 
+Trước tất cả những việc đó, nó chạy version check của
+[`/task-pilot`](#task-pilot) — im lặng nếu bạn đã là bản mới nhất, ngược lại
+hỏi trước khi pull update về, rồi vẫn tiếp tục vào phần research ở trên dù
+bạn chọn gì.
+
 ```
 /task-intake ABC-123
 /task-intake thêm session invalidation khi đổi role

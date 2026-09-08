@@ -9,6 +9,19 @@ Research phase. Ends with `03-plan.md`. **No code is written here.**
 
 Input = the arguments passed to this skill if present, else the rest of the user message after `/task-intake`.
 
+## Update check — before anything else
+
+Before classifying source or touching Jira: invoke the `task-pilot` skill's update check (its
+steps 1–4) for this project.
+
+- Not installed here, already up to date, or the check fails (network, 404) → task-pilot reports
+  that in one line; do not repeat or elaborate on it, continue straight to **Source** below.
+- An update is available → let task-pilot ask its own yes/no and act on the answer (its step 5),
+  **then** continue straight to **Source** below regardless of what the user chose.
+
+Runs on every `/task-intake`, not only the first one in a project — cheap, and silent when there
+is nothing to report. A failed or skipped version check is never a reason to stop a ticket.
+
 ## Source — classify before any Jira call
 
 **jira** when the input contains a ticket key (`[A-Z][A-Z0-9]+-\d+`, e.g. `SLM-107`) or a Jira /
