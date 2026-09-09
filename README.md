@@ -51,7 +51,7 @@ curl -fsSL https://raw.githubusercontent.com/QuantixGlobal/task-pilot/main/insta
 | neither         | asks you on the terminal, creates the one you pick |
 
 
-Restart Claude Code (or reload Cursor) afterwards — the five slash commands
+Restart Claude Code (or reload Cursor) afterwards — the six slash commands
 below are then available.
 
 ## The workflow, in order
@@ -64,10 +64,11 @@ below are then available.
 | 2    | [`/tp-build`](#tp-build)   | After you approve the plan `/tp-intake` produced.                                    |
 | 3    | [`/tp-submit`](#tp-submit) | After `/tp-build` verifies clean and you're happy with the result.                   |
 | —    | [`/tp-pilot`](#tp-pilot)   | Any time, unrelated to any ticket — checks for a newer version of these skills.        |
+| —    | [`/tp-discuss`](#tp-discuss) | Any time — ask a question about the codebase, docs, or past decisions. Read-only. |
 
 
-`/tp-setup` and `/tp-pilot` sit outside the per-ticket loop. The other
-three are meant to run in that order, one ticket at a time — `/tp-build`
+`/tp-setup`, `/tp-pilot`, and `/tp-discuss` sit outside the per-ticket loop. The
+other three are meant to run in that order, one ticket at a time — `/tp-build`
 refuses to start without a plan from `/tp-intake`, and `/tp-submit` looks
 for `/tp-build`'s output.
 
@@ -134,6 +135,20 @@ anything in.
 /tp-pilot
 ```
 
+### `/tp-discuss`
+
+Ask it anything about the codebase, its architecture, past decisions, or documented process —
+read-only, no ticket, no plan, no code. It classifies the question first, then reaches for one
+matching source instead of querying everything: CodeGraph for "where/what calls this", Hindsight
+for "why/what's the convention", Outline for process and design docs, git as a fallback. Every
+answer cites its source; a real task surfaces a suggestion to run `/tp-intake`, not a plan written
+here.
+
+```
+/tp-discuss vì sao module auth lại tách riêng session store?
+/tp-discuss explain how the retry queue works
+```
+
 ## Updating
 
 Same as checking: run `/tp-pilot`. It compares the version recorded at
@@ -159,7 +174,7 @@ command again — it does not ask, and always overwrites with the latest.
 
 ### What it touches
 
-Exactly six paths per client, and nothing else:
+Exactly seven paths per client, and nothing else:
 
 ```
 <client>/skills/tp-intake
@@ -167,6 +182,7 @@ Exactly six paths per client, and nothing else:
 <client>/skills/tp-submit
 <client>/skills/tp-setup
 <client>/skills/tp-pilot
+<client>/skills/tp-discuss
 <client>/task-workflow
 ```
 
@@ -175,7 +191,7 @@ Your `settings.json`, `mcp.json`, and **any other skill in the same
 installer refuses to touch a path outside this list, and `--uninstall` goes
 through the same guard.
 
-These six are *replaced* on every install, not merged, so a file dropped
+These seven are *replaced* on every install, not merged, so a file dropped
 upstream doesn't linger after an update — but it also means a local edit
 inside them is overwritten. Run `--dry-run` first if you've hand-edited
 anything here.

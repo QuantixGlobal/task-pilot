@@ -1,12 +1,13 @@
 #!/bin/sh
 # task-pilot — install the tp-intake / tp-build / tp-submit / tp-setup /
-# tp-pilot skills into the current project, for Claude Code and/or Cursor.
+# tp-pilot / tp-discuss skills into the current project, for Claude Code
+# and/or Cursor.
 #
 #   curl -fsSL https://raw.githubusercontent.com/QuantixGlobal/task-pilot/main/install.sh | sh
 #   curl -fsSL https://raw.githubusercontent.com/QuantixGlobal/task-pilot/main/install.sh | sh -s -- --client both
 #
 # Only the paths this installer owns are touched:
-#   <client>/skills/tp-{intake,build,submit,setup,pilot}
+#   <client>/skills/tp-{intake,build,submit,setup,pilot,discuss}
 #   <client>/task-workflow
 # Your settings.json, other skills, and everything else are left alone.
 
@@ -23,7 +24,10 @@ REWRITE_SKILLS="tp-intake tp-build tp-submit tp-setup"
 # .claude/task-workflow/.source and .cursor/task-workflow/.source itself, on
 # purpose, regardless of which client it was installed under -- a blind
 # rewrite would collapse that to checking one path twice.
-SKILLS="$REWRITE_SKILLS tp-pilot"
+#
+# tp-discuss is excluded too, for a simpler reason: it has no self-referencing
+# "<client>/task-workflow/..." path at all, so there is nothing to rewrite.
+SKILLS="$REWRITE_SKILLS tp-pilot tp-discuss"
 
 CLIENT=""
 TARGET="."
@@ -180,7 +184,7 @@ esac
 # this script goes through here first.
 assert_managed() {
 	case "${1##*/}" in
-	tp-intake | tp-build | tp-submit | tp-setup | tp-pilot | task-workflow) ;;
+	tp-intake | tp-build | tp-submit | tp-setup | tp-pilot | tp-discuss | task-workflow) ;;
 	*) die "refusing to remove a path task-pilot does not own: $1" ;;
 	esac
 	case "$1" in
@@ -326,7 +330,7 @@ if [ "$DRY_RUN" = 1 ]; then
 fi
 
 echo
-echo "task-pilot: done. Available as /tp-intake, /tp-build, /tp-submit, /tp-setup, /tp-pilot"
+echo "task-pilot: done. Available as /tp-intake, /tp-build, /tp-submit, /tp-setup, /tp-pilot, /tp-discuss"
 echo "            Only the paths listed above were touched - your settings and"
 echo "            any other skills are untouched."
 echo "            Restart Claude Code, or reload Cursor, to pick them up."

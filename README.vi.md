@@ -51,7 +51,7 @@ curl -fsSL https://raw.githubusercontent.com/QuantixGlobal/task-pilot/main/insta
 | cả hai | cả hai |
 | không có gì | hỏi trên terminal, tạo cái bạn chọn |
 
-Sau đó restart Claude Code (hoặc reload Cursor) — năm slash command bên dưới
+Sau đó restart Claude Code (hoặc reload Cursor) — sáu slash command bên dưới
 sẽ có sẵn.
 
 ## Luồng làm việc, theo thứ tự
@@ -63,10 +63,11 @@ sẽ có sẵn.
 | 2 | [`/tp-build`](#tp-build) | Sau khi bạn duyệt bản kế hoạch mà `/tp-intake` tạo ra. |
 | 3 | [`/tp-submit`](#tp-submit) | Sau khi `/tp-build` verify sạch và bạn hài lòng với kết quả. |
 | — | [`/tp-pilot`](#tp-pilot) | Bất cứ lúc nào, không liên quan ticket nào — kiểm tra xem các skill này có bản mới hơn không. |
+| — | [`/tp-discuss`](#tp-discuss) | Bất cứ lúc nào — hỏi về codebase, tài liệu, hoặc quyết định trước đây. Chỉ đọc. |
 
-`/tp-setup` và `/tp-pilot` nằm ngoài vòng lặp theo ticket. Ba skill còn
-lại phải chạy đúng thứ tự đó, mỗi lần một ticket — `/tp-build` sẽ từ chối
-chạy nếu chưa có plan từ `/tp-intake`, và `/tp-submit` cần output của
+`/tp-setup`, `/tp-pilot`, và `/tp-discuss` nằm ngoài vòng lặp theo ticket. Ba
+skill còn lại phải chạy đúng thứ tự đó, mỗi lần một ticket — `/tp-build` sẽ từ
+chối chạy nếu chưa có plan từ `/tp-intake`, và `/tp-submit` cần output của
 `/tp-build`.
 
 ### `/tp-setup`
@@ -133,6 +134,19 @@ nhất; ngược lại báo phiên bản cũ → mới và hỏi trước khi pu
 /tp-pilot
 ```
 
+### `/tp-discuss`
+
+Hỏi bất cứ điều gì về codebase, kiến trúc, quyết định trước đây, hay quy trình đã được ghi lại —
+chỉ đọc, không ticket, không plan, không code. Nó phân loại câu hỏi trước, rồi chỉ gọi đúng một
+nguồn phù hợp thay vì hỏi tất cả: CodeGraph cho "chỗ này ở đâu/gọi gì", Hindsight cho "tại sao/quy
+ước là gì", Outline cho quy trình và tài liệu thiết kế, git làm nguồn dự phòng. Mỗi câu trả lời đều
+trích nguồn; nếu lộ ra một task thật sự thì gợi ý chạy `/tp-intake`, không tự lập plan ở đây.
+
+```
+/tp-discuss vì sao module auth lại tách riêng session store?
+/tp-discuss explain how the retry queue works
+```
+
 ## Cập nhật
 
 Giống hệt việc kiểm tra: chạy `/tp-pilot`. Nó so sánh version đã ghi lúc
@@ -156,7 +170,7 @@ không hỏi gì, và luôn ghi đè bằng bản mới nhất.
 
 ### Nó động vào những gì
 
-Đúng sáu đường dẫn cho mỗi client, và không gì khác:
+Đúng bảy đường dẫn cho mỗi client, và không gì khác:
 
 ```
 <client>/skills/tp-intake
@@ -164,6 +178,7 @@ không hỏi gì, và luôn ghi đè bằng bản mới nhất.
 <client>/skills/tp-submit
 <client>/skills/tp-setup
 <client>/skills/tp-pilot
+<client>/skills/tp-discuss
 <client>/task-workflow
 ```
 
@@ -172,7 +187,7 @@ thư mục `skills/` không bao giờ bị đọc, di chuyển, hay xoá** — m
 trong installer từ chối đụng vào bất kỳ path nào ngoài danh sách trên, và
 `--uninstall` cũng đi qua đúng guard đó.
 
-Sáu thư mục này bị *ghi đè* mỗi lần cài, không phải merge, nên một file bị bỏ
+Bảy thư mục này bị *ghi đè* mỗi lần cài, không phải merge, nên một file bị bỏ
 ở bản mới sẽ không còn sót lại sau khi cập nhật — nhưng đồng nghĩa là sửa tay
 bên trong chúng sẽ bị mất. Chạy `--dry-run` trước nếu bạn đã tự sửa gì ở đây.
 
