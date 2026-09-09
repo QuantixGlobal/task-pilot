@@ -159,7 +159,8 @@ When torn, pick the heavier lane.
 Full checklist: [context-sources.md](../../task-workflow/context-sources.md).
 
 - **Git first**: `git log` / `blame` over the relevant area.
-- **Spec**: **jira** → description **plus comments, attachments, issue links, parent epic, similar
+- **Spec**: **jira** → description **plus comments, attachments (download images/logs and actually
+  look at them — see checklist, don't just list filenames), issue links, parent epic, similar
   closed tickets**. **adhoc** → the user message only; record `Jira: SKIPPED (adhoc — no ticket)`.
 - **Outline**: **jira** → the linked doc **plus** a keyword search. **adhoc** → keyword search only
   if the request names a feature; otherwise skip. Record each doc's last-updated date.

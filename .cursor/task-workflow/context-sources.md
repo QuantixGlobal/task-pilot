@@ -23,7 +23,23 @@ to "find a matching ticket".
 On source=jira, the description is **not** the spec. Also read:
 
 - **Comments** — the real spec, mid-flight decisions, and QA-reported edge cases usually live here.
-- **Attachments** — screenshots, designs, logs.
+- **Attachments** — often the real spec: a screenshot can carry a format/UI detail no comment
+  describes (an "Actual vs Expected" pair of images is frequently the *entire* spec, text is just
+  a caption). Don't stop at listing filenames:
+  1. Get metadata first — `fields: ["attachment"]` on the issue returns id, filename, mimeType,
+     size per file.
+  2. Per file: `image/*` → always download and look at it. `text/*` / `.log` → download and read
+     the content. PDF/doc → try reading it; can't → record filename only. Anything else, or over
+     ~10MB → record filename/type/size only, do not attempt to open it.
+  3. Cap at ~5 opened per ticket. Beyond that: `Attachments: N more not analyzed, see Jira`.
+  4. The download mechanism differs by which Atlassian MCP is connected — discover the capability
+     (do not hardcode a tool name), download to a scratch path, never into `.work/`. No such
+     capability on this MCP → record `Attachments: found N, not analyzed (no download tool on
+     this MCP)` and continue. Never guess what an unopened attachment shows.
+  5. Delete the downloaded file once its content is distilled into `01-context.md` — it is scratch,
+     not an artifact, same as any other raw source.
+  6. Every fact from one carries `[jira:TICKET#attachment-<id>]`. A fact that contradicts or adds
+     to the text description is contradiction-table material (Step 4), not a footnote.
 - **Issue links** — `blocks`, `is blocked by`, `relates to`, `duplicates`. A duplicated ticket often
   already contains the analysis.
 - **Parent epic** — higher-level context and ACs.
