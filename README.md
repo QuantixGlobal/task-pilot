@@ -12,7 +12,7 @@ or English), and it takes you through research → an approved plan → implemen
 you review and approve between them instead of one long agent run.
 
 ```
-/task-setup   →   /task-intake   →   /task-build   →   /task-submit
+/tp-setup   →   /tp-intake   →   /tp-build   →   /tp-submit
    once            per ticket      after approval    after it's verified
 ```
 
@@ -59,19 +59,19 @@ below are then available.
 
 | Step | Skill                          | When                                                                                   |
 | ---- | ------------------------------ | -------------------------------------------------------------------------------------- |
-| 0    | [`/task-setup`](#task-setup)   | Once per machine/repo, before the first ticket. Re-run only to add a tool you skipped. |
-| 1    | [`/task-intake`](#task-intake) | Start of every ticket. Give it a Jira key/link, or describe the task directly.         |
-| 2    | [`/task-build`](#task-build)   | After you approve the plan `/task-intake` produced.                                    |
-| 3    | [`/task-submit`](#task-submit) | After `/task-build` verifies clean and you're happy with the result.                   |
-| —    | [`/task-pilot`](#task-pilot)   | Any time, unrelated to any ticket — checks for a newer version of these skills.        |
+| 0    | [`/tp-setup`](#tp-setup)   | Once per machine/repo, before the first ticket. Re-run only to add a tool you skipped. |
+| 1    | [`/tp-intake`](#tp-intake) | Start of every ticket. Give it a Jira key/link, or describe the task directly.         |
+| 2    | [`/tp-build`](#tp-build)   | After you approve the plan `/tp-intake` produced.                                    |
+| 3    | [`/tp-submit`](#tp-submit) | After `/tp-build` verifies clean and you're happy with the result.                   |
+| —    | [`/tp-pilot`](#tp-pilot)   | Any time, unrelated to any ticket — checks for a newer version of these skills.        |
 
 
-`/task-setup` and `/task-pilot` sit outside the per-ticket loop. The other
-three are meant to run in that order, one ticket at a time — `/task-build`
-refuses to start without a plan from `/task-intake`, and `/task-submit` looks
-for `/task-build`'s output.
+`/tp-setup` and `/tp-pilot` sit outside the per-ticket loop. The other
+three are meant to run in that order, one ticket at a time — `/tp-build`
+refuses to start without a plan from `/tp-intake`, and `/tp-submit` looks
+for `/tp-build`'s output.
 
-### `/task-setup`
+### `/tp-setup`
 
 Installs and wires: Jira MCP, Outline MCP, local SonarQube (Docker), Hindsight
 memory, CodeGraph. Run once; asks which tool(s) if you don't name one.
@@ -79,12 +79,12 @@ memory, CodeGraph. Run once; asks which tool(s) if you don't name one.
 commits tokens.
 
 ```
-/task-setup                 → asks which tool to configure
-/task-setup jira outline     → just those two
-/task-setup all               → everything
+/tp-setup                 → asks which tool to configure
+/tp-setup jira outline     → just those two
+/tp-setup all               → everything
 ```
 
-### `/task-intake`
+### `/tp-intake`
 
 Research phase — **writes no code**. Give it a ticket key (`ABC-123`), a Jira
 URL, or a plain request in any language. It reads the ticket (comments,
@@ -92,16 +92,16 @@ attachments, linked issues) or takes your text as the spec, checks git
 history and any configured Sonar/CodeGraph/Hindsight context, and ends with a
 plan you have to approve before anything else happens.
 
-Before any of that, it runs [`/task-pilot`](#task-pilot)'s version check —
+Before any of that, it runs [`/tp-pilot`](#tp-pilot)'s version check —
 silent if you're current, otherwise it asks before pulling in an update, then
 continues into the research above either way.
 
 ```
-/task-intake ABC-123
-/task-intake add session invalidation in updating user's profile API
+/tp-intake ABC-123
+/tp-intake add session invalidation in updating user's profile API
 ```
 
-### `/task-build`
+### `/tp-build`
 
 Executes the plan you just approved: writes the code, runs build/lint/unit
 and integration tests, runs Sonar scoped to only the files this branch
@@ -109,10 +109,10 @@ touched, and reports against the ticket's acceptance criteria. Never commits,
 pushes, opens a PR, or writes to Jira — that stays a manual step, on purpose.
 
 ```
-/task-build
+/tp-build
 ```
 
-### `/task-submit`
+### `/tp-submit`
 
 Distills the finished ticket into Hindsight memory — **outcomes only**: which
 function/file changed, what's true now, who did it. Never stores raw code,
@@ -120,10 +120,10 @@ diffs, or the plan's rejected options. Recalls first and skips anything
 already recorded.
 
 ```
-/task-submit
+/tp-submit
 ```
 
-### `/task-pilot`
+### `/tp-pilot`
 
 Not part of the ticket loop — run it whenever, to check whether this repo has
 published newer skills than the ones installed here. Skips silently if you're
@@ -131,12 +131,12 @@ already current; otherwise tells you old → new and asks before pulling
 anything in.
 
 ```
-/task-pilot
+/tp-pilot
 ```
 
 ## Updating
 
-Same as checking: run `/task-pilot`. It compares the version recorded at
+Same as checking: run `/tp-pilot`. It compares the version recorded at
 install time against this repo's [`VERSION`](VERSION) file and only updates
 after you say yes.
 
@@ -162,11 +162,11 @@ command again — it does not ask, and always overwrites with the latest.
 Exactly six paths per client, and nothing else:
 
 ```
-<client>/skills/task-intake
-<client>/skills/task-build
-<client>/skills/task-submit
-<client>/skills/task-setup
-<client>/skills/task-pilot
+<client>/skills/tp-intake
+<client>/skills/tp-build
+<client>/skills/tp-submit
+<client>/skills/tp-setup
+<client>/skills/tp-pilot
 <client>/task-workflow
 ```
 
@@ -181,7 +181,7 @@ inside them is overwritten. Run `--dry-run` first if you've hand-edited
 anything here.
 
 `<client>/task-workflow/.source` records the `repo`, `ref`, and `version`
-installed; `/task-pilot` reads it. An install from before version tracking
+installed; `/tp-pilot` reads it. An install from before version tracking
 existed (no `version=` line) is always treated as behind.
 
 ## Developing
@@ -198,5 +198,5 @@ Test a change without pushing:
 
 Bump [`VERSION`](VERSION) whenever a skill's content changes — it's a plain
 string compare against the installed stamp, not semver ordering, so any
-change to the file (not just an increment) is enough for `/task-pilot` to
+change to the file (not just an increment) is enough for `/tp-pilot` to
 offer an update.

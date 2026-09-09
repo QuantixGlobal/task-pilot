@@ -1,12 +1,12 @@
 #!/bin/sh
-# task-pilot — install the task-intake / task-build / task-submit / task-setup /
-# task-pilot skills into the current project, for Claude Code and/or Cursor.
+# task-pilot — install the tp-intake / tp-build / tp-submit / tp-setup /
+# tp-pilot skills into the current project, for Claude Code and/or Cursor.
 #
 #   curl -fsSL https://raw.githubusercontent.com/QuantixGlobal/task-pilot/main/install.sh | sh
 #   curl -fsSL https://raw.githubusercontent.com/QuantixGlobal/task-pilot/main/install.sh | sh -s -- --client both
 #
 # Only the paths this installer owns are touched:
-#   <client>/skills/task-{intake,build,submit,setup,pilot}
+#   <client>/skills/tp-{intake,build,submit,setup,pilot}
 #   <client>/task-workflow
 # Your settings.json, other skills, and everything else are left alone.
 
@@ -17,13 +17,13 @@ REF="${TASK_PILOT_REF:-main}"
 
 # Skills whose own content refers to "<this client>/task-workflow/..." for
 # their own scripts, so that prefix gets rewritten for a Cursor install.
-REWRITE_SKILLS="task-intake task-build task-submit task-setup"
+REWRITE_SKILLS="tp-intake tp-build tp-submit tp-setup"
 
-# task-pilot is deliberately excluded from REWRITE_SKILLS: it reads BOTH
+# tp-pilot is deliberately excluded from REWRITE_SKILLS: it reads BOTH
 # .claude/task-workflow/.source and .cursor/task-workflow/.source itself, on
 # purpose, regardless of which client it was installed under -- a blind
 # rewrite would collapse that to checking one path twice.
-SKILLS="$REWRITE_SKILLS task-pilot"
+SKILLS="$REWRITE_SKILLS tp-pilot"
 
 CLIENT=""
 TARGET="."
@@ -180,7 +180,7 @@ esac
 # this script goes through here first.
 assert_managed() {
 	case "${1##*/}" in
-	task-intake | task-build | task-submit | task-setup | task-pilot | task-workflow) ;;
+	tp-intake | tp-build | tp-submit | tp-setup | tp-pilot | task-workflow) ;;
 	*) die "refusing to remove a path task-pilot does not own: $1" ;;
 	esac
 	case "$1" in
@@ -326,7 +326,7 @@ if [ "$DRY_RUN" = 1 ]; then
 fi
 
 echo
-echo "task-pilot: done. Available as /task-intake, /task-build, /task-submit, /task-setup"
+echo "task-pilot: done. Available as /tp-intake, /tp-build, /tp-submit, /tp-setup, /tp-pilot"
 echo "            Only the paths listed above were touched - your settings and"
 echo "            any other skills are untouched."
 echo "            Restart Claude Code, or reload Cursor, to pick them up."

@@ -13,7 +13,7 @@ bước là một skill riêng, để bạn xem và duyệt giữa các bước 
 chạy một mạch dài không kiểm soát.
 
 ```
-/task-setup   →   /task-intake   →   /task-build   →   /task-submit
+/tp-setup   →   /tp-intake   →   /tp-build   →   /tp-submit
   một lần         mỗi ticket        sau khi duyệt      sau khi verify xong
 ```
 
@@ -58,18 +58,18 @@ sẽ có sẵn.
 
 | Bước | Skill | Khi nào dùng |
 | --- | --- | --- |
-| 0 | [`/task-setup`](#task-setup) | Một lần cho mỗi máy/repo, trước ticket đầu tiên. Chạy lại chỉ khi cần thêm tool đã bỏ qua. |
-| 1 | [`/task-intake`](#task-intake) | Bắt đầu mỗi ticket. Đưa key/link Jira, hoặc mô tả trực tiếp việc cần làm. |
-| 2 | [`/task-build`](#task-build) | Sau khi bạn duyệt bản kế hoạch mà `/task-intake` tạo ra. |
-| 3 | [`/task-submit`](#task-submit) | Sau khi `/task-build` verify sạch và bạn hài lòng với kết quả. |
-| — | [`/task-pilot`](#task-pilot) | Bất cứ lúc nào, không liên quan ticket nào — kiểm tra xem các skill này có bản mới hơn không. |
+| 0 | [`/tp-setup`](#tp-setup) | Một lần cho mỗi máy/repo, trước ticket đầu tiên. Chạy lại chỉ khi cần thêm tool đã bỏ qua. |
+| 1 | [`/tp-intake`](#tp-intake) | Bắt đầu mỗi ticket. Đưa key/link Jira, hoặc mô tả trực tiếp việc cần làm. |
+| 2 | [`/tp-build`](#tp-build) | Sau khi bạn duyệt bản kế hoạch mà `/tp-intake` tạo ra. |
+| 3 | [`/tp-submit`](#tp-submit) | Sau khi `/tp-build` verify sạch và bạn hài lòng với kết quả. |
+| — | [`/tp-pilot`](#tp-pilot) | Bất cứ lúc nào, không liên quan ticket nào — kiểm tra xem các skill này có bản mới hơn không. |
 
-`/task-setup` và `/task-pilot` nằm ngoài vòng lặp theo ticket. Ba skill còn
-lại phải chạy đúng thứ tự đó, mỗi lần một ticket — `/task-build` sẽ từ chối
-chạy nếu chưa có plan từ `/task-intake`, và `/task-submit` cần output của
-`/task-build`.
+`/tp-setup` và `/tp-pilot` nằm ngoài vòng lặp theo ticket. Ba skill còn
+lại phải chạy đúng thứ tự đó, mỗi lần một ticket — `/tp-build` sẽ từ chối
+chạy nếu chưa có plan từ `/tp-intake`, và `/tp-submit` cần output của
+`/tp-build`.
 
-### `/task-setup`
+### `/tp-setup`
 
 Cài và wire: Jira MCP, Outline MCP, SonarQube local (Docker), Hindsight
 memory, CodeGraph. Chạy một lần; hỏi bạn muốn setup tool nào nếu không chỉ
@@ -77,12 +77,12 @@ memory, CodeGraph. Chạy một lần; hỏi bạn muốn setup tool nào nếu 
 bịa credential hay commit token.
 
 ```
-/task-setup                 → hỏi cần cấu hình tool nào
-/task-setup jira outline     → chỉ hai cái đó
-/task-setup all               → tất cả
+/tp-setup                 → hỏi cần cấu hình tool nào
+/tp-setup jira outline     → chỉ hai cái đó
+/tp-setup all               → tất cả
 ```
 
-### `/task-intake`
+### `/tp-intake`
 
 Giai đoạn research — **không viết code**. Đưa cho nó một ticket key
 (`ABC-123`), một link Jira, hoặc một yêu cầu bằng văn bản thường (ngôn ngữ
@@ -92,16 +92,16 @@ hình (Sonar/CodeGraph/Hindsight), rồi kết thúc bằng một bản kế ho�
 phải duyệt trước khi bất cứ thứ gì khác xảy ra.
 
 Trước tất cả những việc đó, nó chạy version check của
-[`/task-pilot`](#task-pilot) — im lặng nếu bạn đã là bản mới nhất, ngược lại
+[`/tp-pilot`](#tp-pilot) — im lặng nếu bạn đã là bản mới nhất, ngược lại
 hỏi trước khi pull update về, rồi vẫn tiếp tục vào phần research ở trên dù
 bạn chọn gì.
 
 ```
-/task-intake ABC-123
-/task-intake thêm session invalidation khi đổi role
+/tp-intake ABC-123
+/tp-intake thêm session invalidation khi đổi role
 ```
 
-### `/task-build`
+### `/tp-build`
 
 Thực thi bản kế hoạch bạn vừa duyệt: viết code, chạy build/lint/unit test và
 integration test, chạy Sonar chỉ trên các file mà branch này đã đổi, và báo
@@ -109,10 +109,10 @@ cáo đối chiếu với acceptance criteria của ticket. Không bao giờ com
 mở PR, hay ghi vào Jira — những việc đó vẫn là thao tác thủ công, có chủ đích.
 
 ```
-/task-build
+/tp-build
 ```
 
-### `/task-submit`
+### `/tp-submit`
 
 Chốt lại ticket đã hoàn thành thành Hindsight memory — **chỉ lưu kết quả**:
 function/file nào đã đổi, hiện tại đúng là gì, ai làm. Không bao giờ lưu code
@@ -120,22 +120,22 @@ gốc, diff, hay các phương án đã bị loại trong lúc lập kế hoạc
 bỏ qua nếu đã có ghi nhận trùng.
 
 ```
-/task-submit
+/tp-submit
 ```
 
-### `/task-pilot`
+### `/tp-pilot`
 
 Không thuộc vòng lặp ticket — chạy bất cứ lúc nào để kiểm tra xem repo này đã
 publish bản skill mới hơn bản đang cài chưa. Im lặng bỏ qua nếu đã là bản mới
 nhất; ngược lại báo phiên bản cũ → mới và hỏi trước khi pull về.
 
 ```
-/task-pilot
+/tp-pilot
 ```
 
 ## Cập nhật
 
-Giống hệt việc kiểm tra: chạy `/task-pilot`. Nó so sánh version đã ghi lúc
+Giống hệt việc kiểm tra: chạy `/tp-pilot`. Nó so sánh version đã ghi lúc
 cài với file [`VERSION`](VERSION) của repo này, và chỉ cập nhật sau khi bạn
 đồng ý.
 
@@ -159,11 +159,11 @@ không hỏi gì, và luôn ghi đè bằng bản mới nhất.
 Đúng sáu đường dẫn cho mỗi client, và không gì khác:
 
 ```
-<client>/skills/task-intake
-<client>/skills/task-build
-<client>/skills/task-submit
-<client>/skills/task-setup
-<client>/skills/task-pilot
+<client>/skills/tp-intake
+<client>/skills/tp-build
+<client>/skills/tp-submit
+<client>/skills/tp-setup
+<client>/skills/tp-pilot
 <client>/task-workflow
 ```
 
@@ -177,7 +177,7 @@ Sáu thư mục này bị *ghi đè* mỗi lần cài, không phải merge, nên
 bên trong chúng sẽ bị mất. Chạy `--dry-run` trước nếu bạn đã tự sửa gì ở đây.
 
 `<client>/task-workflow/.source` ghi lại `repo`, `ref`, và `version` đã cài;
-`/task-pilot` đọc file này. Một bản cài từ trước khi có version tracking
+`/tp-pilot` đọc file này. Một bản cài từ trước khi có version tracking
 (không có dòng `version=`) luôn được coi là bản cũ.
 
 ## Phát triển
@@ -195,4 +195,4 @@ Test một thay đổi mà không cần push:
 Bump [`VERSION`](VERSION) mỗi khi nội dung một skill thay đổi — đây là phép
 so sánh chuỗi thuần với bản đã cài, không phải so sánh semver theo thứ tự,
 nên bất kỳ thay đổi nào của file (không cần phải là tăng version) cũng đủ để
-`/task-pilot` báo có bản cập nhật.
+`/tp-pilot` báo có bản cập nhật.

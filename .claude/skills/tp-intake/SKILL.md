@@ -1,25 +1,25 @@
 ---
-name: task-intake
-description: Research a Jira ticket or a free-form user request and produce a user-approved plan BEFORE any code is written. Use when the user types /task-intake with a ticket key (ABC-123), a Jira link, or a direct task in any language with no ticket ("làm cho tôi...", "add ..."). Never edits code, never commits, never writes to Jira or Outline.
+name: tp-intake
+description: Research a Jira ticket or a free-form user request and produce a user-approved plan BEFORE any code is written. Use when the user types /tp-intake with a ticket key (ABC-123), a Jira link, or a direct task in any language with no ticket ("làm cho tôi...", "add ..."). Never edits code, never commits, never writes to Jira or Outline.
 ---
 
-# task-intake — from ticket or direct request to approved plan
+# tp-intake — from ticket or direct request to approved plan
 
 Research phase. Ends with `03-plan.md`. **No code is written here.**
 
-Input = the arguments passed to this skill if present, else the rest of the user message after `/task-intake`.
+Input = the arguments passed to this skill if present, else the rest of the user message after `/tp-intake`.
 
 ## Update check — before anything else
 
-Before classifying source or touching Jira: invoke the `task-pilot` skill's update check (its
+Before classifying source or touching Jira: invoke the `tp-pilot` skill's update check (its
 steps 1–4) for this project.
 
-- Not installed here, already up to date, or the check fails (network, 404) → task-pilot reports
+- Not installed here, already up to date, or the check fails (network, 404) → tp-pilot reports
   that in one line; do not repeat or elaborate on it, continue straight to **Source** below.
-- An update is available → let task-pilot ask its own yes/no and act on the answer (its step 5),
+- An update is available → let tp-pilot ask its own yes/no and act on the answer (its step 5),
   **then** continue straight to **Source** below regardless of what the user chose.
 
-Runs on every `/task-intake`, not only the first one in a project — cheap, and silent when there
+Runs on every `/tp-intake`, not only the first one in a project — cheap, and silent when there
 is nothing to report. A failed or skipped version check is never a reason to stop a ticket.
 
 ## Source — classify before any Jira call
@@ -29,7 +29,7 @@ browse / `selectedIssue=` URL. Extra words next to a key still count as **jira**
 annotating that ticket). Folder: the ticket key.
 
 **adhoc** when there is no ticket key and no Jira URL — a direct order in any language.
-Examples: `/task-intake làm cho tôi abc...`, `/task-intake add session invalidation on role change`.
+Examples: `/tp-intake làm cho tôi abc...`, `/tp-intake add session invalidation on role change`.
 Folder: `adhoc-<slug>` from the request (lowercase, hyphenated, ≤40 chars). The user message **is**
 the spec. Quote it verbatim in `01-context.md` as `[user]`.
 
@@ -119,7 +119,7 @@ Write to `.work/<TICKET>/`:
 | `00-meta.md` | source (`jira` \| `adhoc`), ticket or `adhoc-<slug>`, branch, base ref, lane, capability matrix, MCP availability, manifest |
 | `01-context.md` | spec (Jira or verbatim user request) + Outline + git history + memory, distilled |
 | `02-analysis.md` | contradiction table, ACs, edge cases, planned test cases |
-| `03-plan.md` | execution plan — the input to `/task-build` |
+| `03-plan.md` | execution plan — the input to `/tp-build` |
 
 Before creating the first file:
 
@@ -242,6 +242,6 @@ Stop and re-plan if: a file outside the list must change, a new file or abstract
 
 Summarize in chat: contradictions found, chosen option, scope, step count, files reused vs
 created, what you refused to add, biggest risk, which sources were SKIPPED. Then tell the user
-to run `/task-build <TICKET>`, then `/task-submit <TICKET>` after the code is done.
+to run `/tp-build <TICKET>`, then `/tp-submit <TICKET>` after the code is done.
 
 **Stop here. Do not write code.**

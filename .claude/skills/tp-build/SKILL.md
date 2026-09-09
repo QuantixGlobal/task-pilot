@@ -1,14 +1,14 @@
 ---
-name: task-build
-description: Execute an approved plan from /task-intake — write the code, run verification (build, lint, unit, integration, and Sonar scoped to files changed on this branch), report against acceptance criteria, then propose /task-submit for Hindsight memory. Use when the user types /task-build, or when 03-plan.md exists and they say to start implementing (any language). Never commits, never pushes, never opens a PR, never writes to Jira.
+name: tp-build
+description: Execute an approved plan from /tp-intake — write the code, run verification (build, lint, unit, integration, and Sonar scoped to files changed on this branch), report against acceptance criteria, then propose /tp-submit for Hindsight memory. Use when the user types /tp-build, or when 03-plan.md exists and they say to start implementing (any language). Never commits, never pushes, never opens a PR, never writes to Jira.
 ---
 
-# task-build — execute, verify, distill
+# tp-build — execute, verify, distill
 
-Ticket = `$ARGUMENTS` if present, else the ticket key in the user message.
+Ticket = the arguments passed to this skill if present, else the ticket key in the user message.
 
-Input: `.work/<TICKET>/03-plan.md`, produced by `/task-intake`.
-No plan → say so and suggest `/task-intake` first. For a genuinely small change, ask permission
+Input: `.work/<TICKET>/03-plan.md`, produced by `/tp-intake`.
+No plan → say so and suggest `/tp-intake` first. For a genuinely small change, ask permission
 to write a minimal plan inline and continue. The same minimum-change rules below apply to that
 inline plan: reuse first, fewest files, no extra layers.
 
@@ -23,7 +23,7 @@ ALLOWED:   git status / diff / log / blame / show / ls-files
 ```
 
 `stash` and `checkout` destroy a dirty working tree. Use
-`bash .cursor/task-workflow/scripts/changed-files.sh` for scope.
+`bash .claude/task-workflow/scripts/changed-files.sh` for scope.
 
 ## Minimum change
 
@@ -80,7 +80,7 @@ grows from comments, TODOs, or future-proofing.
 3. **Check anchors**: `git log --oneline -1`. If HEAD moved since the plan was written, or a planned
    file was changed by someone else, tell the user before proceeding.
 4. ```bash
-   bash .cursor/task-workflow/scripts/changed-files.sh > .work/<TICKET>/changed-files.txt
+   bash .claude/task-workflow/scripts/changed-files.sh > .work/<TICKET>/changed-files.txt
    ```
    This is the "before I touched anything" baseline.
 5. If the baseline already contains many unrelated files (scratch directories, old untracked files),
@@ -135,7 +135,7 @@ Details: [sonar-scope.md](../../task-workflow/sonar-scope.md). Run **once, when 
 2. Regenerate `changed-files.txt` (it now includes the files you just edited).
 3. Scan → list issues → filter:
    ```bash
-   <issue-listing command> | bash .cursor/task-workflow/scripts/scope-filter.sh .work/<TICKET>/changed-files.txt
+   <issue-listing command> | bash .claude/task-workflow/scripts/scope-filter.sh .work/<TICKET>/changed-files.txt
    ```
 4. **Scope is file-level**: a file touched on this branch → fix *every* warning in it, including
    pre-existing ones. Files not touched → **report only**, never edit.
@@ -163,9 +163,9 @@ Never report a skipped step as passing.
 
 Do **not** write Hindsight memories in this skill. End the report with:
 
-> Code is in. Run `/task-submit <TICKET>` to save a Hindsight summary (who changed what, fixes, lessons — no source, no options).
+> Code is in. Run `/tp-submit <TICKET>` to save a Hindsight summary (who changed what, fixes, lessons — no source, no options).
 
-If the user agrees in the same turn, follow [task-submit](../task-submit/SKILL.md).
+If the user agrees in the same turn, follow [tp-submit](../tp-submit/SKILL.md).
 
 Include a short **retro on this skill**: which step was redundant, missing, or misleading.
 
@@ -178,4 +178,4 @@ Include a short **retro on this skill**: which step was redundant, missing, or m
 4. Confirm `git status` is as clean as before the run, apart from the source files the plan intended
    to change.
 
-`/task-intake` looks in the archive before researching a ticket again.
+`/tp-intake` looks in the archive before researching a ticket again.

@@ -1,13 +1,13 @@
 ---
-name: task-setup
-description: Install and wire Jira MCP, Outline MCP, local SonarQube, Hindsight memory, and CodeGraph for this machine/repo. Use when the user types /task-setup or /agent-setup, asks to cài đặt / setup / install MCP, or names Jira, Outline, SonarQube, Hindsight, or CodeGraph as something to configure. Do not invent API keys. Do not commit tokens.
+name: tp-setup
+description: Install and wire Jira MCP, Outline MCP, local SonarQube, Hindsight memory, and CodeGraph for this machine/repo. Use when the user types /tp-setup or /agent-setup, asks to cài đặt / setup / install MCP, or names Jira, Outline, SonarQube, Hindsight, or CodeGraph as something to configure. Do not invent API keys. Do not commit tokens.
 ---
 
-# task-setup
+# tp-setup
 
 Agent **installs and wires config**. User **creates API keys / completes OAuth**, then sends credentials back.
 
-Tools = `$ARGUMENTS` if present (e.g. `hindsight`, `jira outline`), else ask **which** to set up. One at a time unless they said `all`.
+Tools = the arguments passed to this skill if present (e.g. `hindsight`, `jira outline`), else ask **which** to set up. One at a time unless they said `all`.
 
 | Token | Meaning |
 |---|---|

@@ -1,11 +1,11 @@
 ---
-name: task-pilot
-description: Check whether a newer version of the task-pilot skills (task-intake, task-build, task-submit, task-setup) is available for this project, and ask before pulling it in. Use when the user types /task-pilot, asks to check for updates / update the skills / pull latest skills, or says kiểm tra cập nhật / cập nhật skill / pull skill mới. Never installs anything without an explicit yes. Never edits skill content directly — delegates the actual pull to install.sh.
+name: tp-pilot
+description: Check whether a newer version of the task-pilot skills (tp-intake, tp-build, tp-submit, tp-setup) is available for this project, and ask before pulling it in. Use when the user types /tp-pilot, asks to check for updates / update the skills / pull latest skills, or says kiểm tra cập nhật / cập nhật skill / pull skill mới. Never installs anything without an explicit yes. Never edits skill content directly — delegates the actual pull to install.sh.
 ---
 
-# task-pilot — update check
+# tp-pilot — update check
 
-This project's `task-intake` / `task-build` / `task-submit` / `task-setup`
+This project's `tp-intake` / `tp-build` / `tp-submit` / `tp-setup`
 skills were installed by `install.sh` from a source repo. That installer
 stamps the version it installed into `<client>/task-workflow/.source`. This
 skill's only job: read that stamp, compare it to what the source repo
@@ -86,7 +86,7 @@ curl -fsSL "https://raw.githubusercontent.com/<repo>/<ref>/install.sh" \
 ```
 
 This reuses `install.sh`'s own replace-not-merge logic and its guard against
-touching anything outside the five paths it owns — this skill does not
+touching anything outside the six paths it owns — this skill does not
 reimplement that, it only decides whether to invoke it.
 
 After it runs, read the refreshed `.source` and confirm the new `version=`

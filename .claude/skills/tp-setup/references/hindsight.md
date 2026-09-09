@@ -51,7 +51,7 @@ docker ps --filter name=^hindsight$ --format '{{.Names}} {{.Status}}'
 | Container `hindsight` is running, health not ready | Do **not** `docker rm`. Wait for health (same loop as start). Then **Bank + MCP**. |
 | Neither | Ask Q2 (LLM), then **Local install**, then **Bank + MCP**. |
 
-Changing provider or key on an instance that is already up is a **reconfigure** request — only then `docker rm -f hindsight` and rerun. `/task-setup` local does not reconfigure by default.
+Changing provider or key on an instance that is already up is a **reconfigure** request — only then `docker rm -f hindsight` and rerun. `/tp-setup` local does not reconfigure by default.
 
 ---
 

@@ -1,13 +1,13 @@
 ---
-name: task-submit
-description: Distills a finished /task-intake + /task-build run into Hindsight — outcomes only (who changed which function/file, who optimized, errors fixed). Recalls first; skips duplicates; updates stale rules in place without deleting past ticket work-logs. Use when the user types /task-submit, says lưu memory / tóm tắt task / submit ticket, or agrees after /task-build proposes saving. Never stores raw code, Gate B options, or plan rewrite notes. Never commits or writes to Jira.
+name: tp-submit
+description: Distills a finished /tp-intake + /tp-build run into Hindsight — outcomes only (who changed which function/file, who optimized, errors fixed). Recalls first; skips duplicates; updates stale rules in place without deleting past ticket work-logs. Use when the user types /tp-submit, says lưu memory / tóm tắt task / submit ticket, or agrees after /tp-build proposes saving. Never stores raw code, Gate B options, or plan rewrite notes. Never commits or writes to Jira.
 ---
 
-# task-submit — summarize and remember
+# tp-submit — summarize and remember
 
 Ticket = the arguments passed to this skill if present, else the ticket key in the user message or `.work/*/04-verify.md`.
 
-Input: `.work/<TICKET>/` from `/task-intake` + `/task-build` (`00-meta.md`, `03-plan.md`, `04-verify.md`, `journal.md`). Missing local dir → try `~/.agent-task-archive/<repo-name>/<TICKET>/`. Still missing → say so and suggest `/task-build` first.
+Input: `.work/<TICKET>/` from `/tp-intake` + `/tp-build` (`00-meta.md`, `03-plan.md`, `04-verify.md`, `journal.md`). Missing local dir → try `~/.agent-task-archive/<repo-name>/<TICKET>/`. Still missing → say so and suggest `/tp-build` first.
 
 **không cần phải lưu thẳng code, chỉ cần tóm tắt.**
 
@@ -25,7 +25,7 @@ ALLOWED:   git status / diff --stat / log / blame / show --stat; Hindsight recal
 
 ## What to store (outcomes only)
 
-A later `/task-intake` must be able to answer: **which function/file, what is true now, who did it**.
+A later `/tp-intake` must be able to answer: **which function/file, what is true now, who did it**.
 
 | Unit | When | Content (no source) |
 |---|---|---|
@@ -145,11 +145,11 @@ Never write: secrets, PII, transient CI color, directory-layout facts already in
 
 1. List each unit: **skipped** (id + why) / **updated** (id + what sentence changed) / **added** (new title) / **invalidated** (id + duplicate-of). Or `memory: UNAVAILABLE`.
 2. Add `05-submit.md` to the `00-meta.md` manifest.
-3. Propose archive copy if `/task-build` has not archived yet. Ask before deleting `.work/`.
+3. Propose archive copy if `/tp-build` has not archived yet. Ask before deleting `.work/`.
 4. **Stop.** Do not commit. Do not open a PR.
 
-## After `/task-build`
+## After `/tp-build`
 
 If this skill was not invoked: end the build report with one line —
 
-> Code is in. Run `/task-submit <TICKET>` to save a Hindsight summary (who changed what, fixes, lessons — no source, no options).
+> Code is in. Run `/tp-submit <TICKET>` to save a Hindsight summary (who changed what, fixes, lessons — no source, no options).
